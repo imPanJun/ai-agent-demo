@@ -26,12 +26,9 @@ with col1:
 with col2:
     st.subheader("【AI 幕後思考日誌】")
     
-    # 當左邊的按鈕被按下時，右邊才會開始跑動態
     if start_btn:
-        # st.empty() 是一個容器，讓我們可以動態替換裡面的文字
         log_container = st.empty()
         
-        # 模擬黑客松 Demo 最愛看的動態思考過程
         with log_container.container():
             st.info(f"💡 收到指令！目標：以「{tone}」語氣，製作關於「{keyword}」的{task}。")
             time.sleep(1.5)
@@ -42,15 +39,37 @@ with col2:
             st.write("📊 步驟 2：正在整合內容並建立邏輯大綱... (成功)")
             time.sleep(1.5)
             
-            st.write("🎨 步驟 3：正在跨系統呼叫簡報生成工具... (完成)")
+            st.write("📝 步驟 3：正在生成結構化 Prompt...")
+            time.sleep(1.5)
+            
+            # 根據使用者選擇生成 Prompt
+            prompt_text = f"""
+Act as an AI assistant.
+Task: {task}
+Tone: {tone}
+Topic: {keyword}
+
+Please provide a structured output that matches the task type.
+"""
+            st.code(prompt_text, language="markdown")
+            
+            # 工具推薦邏輯
+            tool_map = {
+                "做簡報": "Gamma (AI 簡報工具)",
+                "寫企劃": "Notion AI / ChatGPT",
+                "查資料": "Perplexity (AI 搜尋引擎)"
+            }
+            recommended_tool = tool_map.get(task, "一般 AI 工具")
+            
+            st.write("🛠️ 步驟 4：推薦工具 →", recommended_tool)
             time.sleep(1.5)
             
             st.success("🎉 任務跨系統協調完畢！")
         
-        # 跑完後，直接在右下角生出一個下載按鈕 (模擬成品產出)
+        # 模擬下載按鈕
         st.download_button(
-            label="👉 點我下載 PPT 簡報草稿",
-            data="這是一份假的檔案內容，未來黑客松可以串接真實的 PPT 生成套件",
-            file_name="員工培訓簡報.txt",
+            label="👉 點我下載 Prompt 草稿",
+            data=prompt_text,
+            file_name="AI_prompt.txt",
             mime="text/plain"
         )
